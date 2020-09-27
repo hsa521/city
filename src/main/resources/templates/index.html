@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <select id="getp" name="getp">
+        <option value="">请选择</option>
+    </select>
+    <select id="getc" name="getc">
+        <option value="">请选择</option>
+    </select>
+    <select id="geta" name="geta">
+        <option value="">请选择</option>
+    </select>
+</div>
+<script type="application/javascript" src="/js/jquery-3.3.1.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $.ajax({
+          url:"getp",
+            success:function (data){
+              var html = "";
+              for(var e in data){
+                  html+='<option value='+data[e].id+'>'+data[e].name+'</option>'
+
+              }
+              $("#getp").append(html);
+              //调用change方法进行控制
+              $("#getp").change(function () {
+              $("#getc").html("");
+              $("#geta").html("");
+                  getc($(this).val());
+              })
+
+            }
+
+        })
+
+     function getc(id) {
+         $.ajax({
+             url:"getc",
+             data:{pid:id},
+             success:function (data){
+                 var html = "";
+                 for(var i in data){
+                     html+='<option value='+data[i].id+'>'+data[i].name+'</option>'
+                 }
+                 $("#getc").append(html);
+                 //调用change方法进行控制
+                 $("#getc").change(function () {
+                     $("#geta").html("");
+                     geta($(this).val())
+                 })
+                 $("#geta").get(0).selectedIndex=0;
+                 geta($("#getc").val())
+             }
+
+         })
+     }
+
+
+        function geta(id) {
+            $.ajax({
+                url:"geta",
+                data:{cid:id},
+                success:function (data){
+                    var html = "";
+                    for(var i in data){
+                        html+='<option value='+data[i].id+'>'+data[i].name+'</option>'
+                    }
+                    $("#geta").append(html);
+                    $("#geta").get(0).selectedIndex=0;
+                }
+
+            })
+        }
+    })
+</script>
+</body>
+</html>
